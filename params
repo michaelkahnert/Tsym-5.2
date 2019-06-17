@@ -1,0 +1,204 @@
+c***********************************************************************
+c                T S Y M   I N P U T   P A R A M E T E R   F I L E 
+c	         Date:   2012-07-10
+c	         Author: M. Kahnert
+ 5.2	         Tsym Version
+c***********************************************************************
+c
+c     PARTICLE GEOMETRY, SYMMETRIES, AND SIZE:	
+c
+c-----------------------------------------------------------------------
+c     Geom: Geometry-parameter. Possible settings are
+c     	PRISMS: Polygonal Prisms (order of polygon specified by Nsym)
+c     	CHEB2D: Axisymmetric Chebyshev particles; 
+c     	CHEB3D: 3D-Chebyshev particles;
+c     	SPHERE: Spherical particles;
+c     	GRSPHR: Gaussian Random Sphere;
+c     	GRSP2D: 2D-Gaussian Random Sphere;
+c     	GRSCHB: Gaussian Random Sphere/Chebyshev hybrid particles
+c-----------------------------------------------------------------------
+ 'CHEB3D'  	! Geom
+c-----------------------------------------------------------------------
+c     For CHEB2D, CHEB3D, GRSCHB, need to specify:
+c       cheborder:  	order of Chebyshev polynomial
+c     For GRSPHR, GRSP2D, and GRSCHB, specify:
+c       ngrs: 		a cardianal number that is used for initialising
+c			the random-number generator 
+c       lreadgeom:	To read in a Gaussian Random Sphere geometry from 
+c        	 	a previous run, set lreadgeom=.true. (This option  
+c        	 	has been introduced because GRS computations for  
+c        	 	low angular correlations can be time consuming.)
+c-----------------------------------------------------------------------
+ 60		! cheborder
+ 1              ! ngrs
+ .false. 	! lreadgeom
+c-----------------------------------------------------------------------
+c   Particle dimensions:
+c   * Geom='PRISMS':
+c     The geometry of polygonal prisms is determined by gpar1, gpar2,
+c     where the meaning of these parameters is controlled by the
+c     variable igeom as follows:
+c        igeom=1: gpar1 = side length l of polygon
+c                 gpar2 = height h of prism
+c        igeom=2: gpar1 = "radius" a of polygon = distance centre-corner
+c                 gpar2 = half-height h/2 of prism
+c        igeom=3: gpar1 = radius of equivalent-volume sphere Rv
+c                 gpar2 = aspect ratio epsilon=2*a/h
+c        igeom=4: gpar1 = radius of equivalent-area sphere Ra
+c                 gpar2 = aspect ratio epsilon=2*a/h
+c     (gpar3 is not used)
+c
+c   * Geom='CHEB2D', 'CHEB3D'
+c     The geometry of a Chebyshev particle is specified by setting
+c     igeom=1  
+c     gpar1=radius of unperturbed sphere
+c     gpar2=deformation parameter (-1 <= gpar2 <= 1).
+c     (gpar3 is not used)
+c
+c   * Geom='SPHERE'
+c   * For a homogeneous sphere, set
+c     igeom=1  
+c     gpar1=sphere radius
+c     (gpar2, gpar3 are not used)
+c
+c   * Geom='GRSPHR', 'GRSP2D'
+c   * For a Gaussian random sphere, set
+c     igeom=1  
+c     gpar1=radius of unperturbed sphere
+c     gpar2=relative radial standard deviation (0 <= gpar2 <= 1)
+c     gpar3=angular correlation (in degrees, should be >=4 degrees,  
+c	    due to computational instabilities for smaller angles)
+c
+c   * Geom='GRSCHB'
+c   * For a Gaussian random sphere/Chebyshev hybrids, set
+c     igeom=1  
+c     gpar1=radius of unperturbed sphere
+c     gpar2=deformation parameter AND relative radial standard deviation 
+c	    (0 <= gpar2 <= 1)
+c     gpar3=angular correlation (in degrees, should be >=4 degrees,  
+c	    due to computational instabilities for smaller angles)
+c-----------------------------------------------------------------------
+ 1		! igeom
+ 1.4d0          ! gpar1
+ 0.04d0		! gpar2 
+ 4.00d0		! gpar3
+c-----------------------------------------------------------------------
+c     Particle symmetries:
+c     Pgroup: possible settings are Cs, Ci, Cn, Dn, Cnv, Cnh, Dnh,
+c       Dnd, and Sn. The non-cubic symmetry groups T, Td, Th, O, Oh, and 
+c       Ih are not yet fully implemented
+c     Nsym:	Main symmetry-axis is Nsym-fold (use Nsym=1 for 
+c     		particles without rotational symmetries)
+c-----------------------------------------------------------------------
+ 'Dnh'		! Pgroup
+ 60		! Nsym
+c-----------------------------------------------------------------------
+c     Wavelength lambda and refractive index mr: 
+c-----------------------------------------------------------------------
+ 0.6283185308d0	! lambda
+ (3d0,0.1d0) 	! mr, typical for hematite in the visible
+c-----------------------------------------------------------------------
+c
+c  PARTICLE ORIENTATIONS:
+c
+c-----------------------------------------------------------------------
+c     Random and/or fixed orientations:
+c       norient = 1: random orientations
+c       norient = 2: fixed orientations
+c       norient = 3: both random and fixed orientations
+c-----------------------------------------------------------------------
+ 3		! norient
+c-----------------------------------------------------------------------
+c     Euler angles (in degrees) for particle in fixed orientation: 
+c       (only relevant for norient=2 or 3)
+c       (NOTE: These Euler angles descrive an ACTIVE rotation
+c       of the particle in a fixed coordinate system!)
+c         alpha: azimuth angle describing the rotation of the particle 
+c            axis about the fixed z-axis
+c         beta:  polar angle between the particle axis and 
+c            the z-axis of the fixed coordinate frame (where the 
+c            k-vector of the incident field is along the positive
+c            z-direction); make sure you give the betas in
+c	     ascending order!
+c         gamma: rotation of particle about its main symmetry axis
+c       (NB: alpha,beta,gamma correspond,respectively, to the angles 
+c       PHI,THETA,BETA in the DDSCAT-code.)
+c       neuler: number of discrete orientations
+c-----------------------------------------------------------------------
+ 2		! neuler
+ 0d0 0d0	! alpha
+ 0d0 90d0	! beta
+ 0d0 0d0	! gamma
+c-----------------------------------------------------------------------
+c
+c     PARAMETERS DETERMINING THE NUMERICAL PRECISION:	
+c
+c-----------------------------------------------------------------------
+c     Truncation of the T-matrix:
+c       T-matrix elements T_{n,m,n',m'}^{(i,j)}, i,j=1,2, are computed 
+c       for n,n' = 1,...,nmax and m,m' = -mmax,...,mmax (mmax <= nmax).
+c       Analogous for the matrices Q and Rg Q.
+c-----------------------------------------------------------------------
+ 20		! nmax
+ 20		! mmax
+c-----------------------------------------------------------------------
+c     Numerical evaluation of surface integrals in Waterman's method:	
+c       Gauss-Legendre quadrature uses th_nint integration intervals
+c       in the polar direction, and phi_nint intervals in the azimuthal
+c       direction. Each integration interval contains 16 Gauss-Legendre
+c       quadrature points. The total interval in the polar and azimuthal
+c       depends on the particle symmetry. For instance, for Cn-symmetry
+c       the azimuthal integration interval is reduced to [0,2*pi/Nsym].
+c       Note: For axisymmetric particles and spheres, use phi_nint=2. 
+c-----------------------------------------------------------------------
+ 50		! th_nint
+ 4		! phi_nint
+c-----------------------------------------------------------------------
+c	Method for computing the T-matrix: 
+c	  By default, the T-matrix is computed via the matrices Q and RgQ
+c	  according to T = -RgQ * Q^{-1}. However, for Geom='CHEB2D',
+c	  'CHEB3D', 'GRSPHR', 'GRSP2D', or 'GRSCHB', one can choose to 
+c         use an iterative solution scheme based on a Lippmann-Schwinger 
+c	  T-matrix equation.
+c	   lprtb:      	.true. for using perturbative Lippmann-Schwinger 
+c	 	     	approach for solving the scattering problem
+c          prtb_order: 	order of perturbation theory (for lprtb=.true.)
+c-----------------------------------------------------------------------
+ .false. 	! lprtb
+ 6		! prtb_order
+c-----------------------------------------------------------------------
+c     Method for numerical computation of surface integrals:
+c       Cyl_Quad = .true. : use special quadrature scheme for 
+c                           Geom='PRISMS'
+c       Cyl_Quad = .false.: use general double-quadrature scheme
+c-----------------------------------------------------------------------
+ .false. 	! Cyl_Quad
+c-----------------------------------------------------------------------
+c     Level of use of group theory: 
+c       lirredrep=.true. :  use irreducible representations
+c                 .false.:  do not use irreducible representations
+c       chartabfile:	    file name of the character table
+c     Method for constructing the transformation into the irreducible
+c     basis from the projection matrices:
+c       Pmatmethod=1     :  Determine the linearly independent row 
+c  			    vectors of the projection matrices
+c       Pmatmethod=2     :  apply Lapack SVD for general matrices to the
+c     		       	    projectors
+c       Pmatmethod=3     :  apply Propack SVD for sparse matrices to the
+c     		       	    projectors
+c-----------------------------------------------------------------------
+ .true. 	! lirredrep
+ "CHARACTER_TABLES/D0060h.char"	! chartabfile
+ 3              ! Pmatmethod
+c-----------------------------------------------------------------------
+c     Output specifications:
+c	ntout: specifies the number of scattering angles at which
+c	       the Stokes scattering matrix and differential scattering
+c	       cross sections will be written to output.
+c	tmin:  smallest scattering angle (tmin>=0)
+c	tmax:  largest scattering angle (tmax<=360)
+c-----------------------------------------------------------------------
+ 2881		! ntout
+ 0d0		! tmin
+ 360d0		! tmax
+c-----------------------------------------------------------------------

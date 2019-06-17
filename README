@@ -1,0 +1,37 @@
+T matrix code for scattering by homogeneous particles with discrete symmetries
+
+Version 5.2
+
+Michael Kahnert
+
+Short description
+Tsym (pronounced "tee-simm") solves the electromagnetic scattering problem by use of Waterman's 
+T-matrix method (also known as the extended boundary condition or null-field method).
+For particle morphologies with geometric symmetries, the code makes use of group theory to 
+systematically simplify the numerical solution to Maxwell's equations. Although the code can, 
+in principle, handle arbitrary star-shaped geometries, the code is most efficient for 
+non-axisymmetric particles with finite symmetries.
+For particles with small-scale surface roughness, the code also has an option to use an 
+iterative Lippmann-Schwinger equation approach for computing the T matrix.
+Main strength of the code: Increased numerical stability and reduced CPU time requirements 
+for particles with geometric symmetries.
+Main weakness of the code: The program does not contain any automatic convergence routines. 
+Ensuring the convergence and correctness of the results is entirely the user's responsibility. 
+Thus, it is recommended that the code be used by experienced users only.
+
+User's guide
+A description of the code can be found in the following paper:
+M. Kahnert. The T-matrix code Tsym for homogenous dielectric particles with finite symmetries. 
+J. Quant. Spectrosc. Radiat. Transfer 123 (2013) 62-78.
+
+Acknowledgements
+Tsym is making use of various subroutines for orientation-averaging, computation of Bessel 
+functions, associated Legendre functions, vector coupling coefficients, and much more that 
+have been borrowed from other codes. I am especially indebted to Heikki Laitinen, Kari Lumme, 
+Dan Mackowski, Michael Mishchenko, Karri Muinonen, and Timo Nousiainen for their kind permission 
+to include various Fortran routines from their respective programs in the distribution of Tsym. 
+A detailed list of those subroutines and their authors can be found both in the comments of the 
+source code and in the code documentation. The development of the code has been financed over 
+the years in different projects financed by the Norwegian Research Council (Norsk forskningsråd) 
+and by the Swedish Research Council (Vetenskapsrådet).
+
